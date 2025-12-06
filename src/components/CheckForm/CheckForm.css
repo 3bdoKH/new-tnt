@@ -1,0 +1,191 @@
+.check-form-split-container {
+    display: flex;
+    max-width: 1200px;
+    margin: 50px auto;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    min-height: 600px;
+    backdrop-filter: blur(10px);
+}
+
+.check-image-section {
+    flex: 1;
+    background: rgba(248, 249, 250, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+}
+
+.check-form-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+.check-form-section {
+    flex: 1;
+    padding: 40px;
+    direction: rtl;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #7B8A8C;
+}
+
+.inspection-form {
+    width: 100%;
+    max-width: 400px;
+}
+
+.check-form-title {
+    color: #000000;
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 30px;
+    margin-top: 0;
+}
+
+.check-form-group {
+    margin-bottom: 20px;
+}
+
+.check-form-group label {
+    display: block;
+    color: #333;
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 8px;
+    text-align: right;
+}
+
+.check-input-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.check-input-wrapper input,
+.check-input-wrapper select,
+.check-input-wrapper textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background: rgba(248, 249, 250, 0.9);
+    font-size: 1rem;
+    color: #333;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+    font-family: inherit;
+}
+
+.check-input-wrapper input:focus,
+.check-input-wrapper select:focus,
+.check-input-wrapper textarea:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+.check-input-wrapper input::placeholder,
+.check-input-wrapper textarea::placeholder {
+    color: #999;
+    font-size: 0.9rem;
+}
+
+.check-input-wrapper textarea {
+    resize: vertical;
+    min-height: 80px;
+    font-family: inherit;
+}
+
+.check-search-btn {
+    width: 100%;
+    padding: 15px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+}
+
+.check-search-btn:hover {
+    background: #0056b3;
+}
+
+.check-search-btn:active {
+    transform: translateY(1px);
+}
+
+/* Responsive design */
+@media (max-width: 1024px) {
+    .check-form-split-container {
+        margin: 30px 20px;
+    }
+
+    .check-image-section,
+    .check-form-section {
+        padding: 30px;
+    }
+}
+
+@media (max-width: 768px) {
+    .check-form-split-container {
+        flex-direction: column;
+        margin: 20px;
+        min-height: auto;
+    }
+
+    .check-image-section {
+        padding: 20px;
+        order: 2;
+        display: none;
+    }
+
+    .check-form-section {
+        padding: 30px 20px;
+        order: 1;
+    }
+
+    .check-form-title {
+        font-size: 1.6rem;
+    }
+
+    .check-input-wrapper input,
+    .check-input-wrapper select,
+    .check-input-wrapper textarea {
+        padding: 10px 12px;
+        font-size: 0.9rem;
+    }
+
+    .check-search-btn {
+        padding: 12px;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .check-form-split-container {
+        margin: 10px;
+    }
+
+    .check-image-section,
+    .check-form-section {
+        padding: 15px;
+    }
+
+    .check-form-title {
+        font-size: 1.4rem;
+    }
+
+    .check-form-group label {
+        font-size: 0.9rem;
+    }
+}

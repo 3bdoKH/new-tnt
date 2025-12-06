@@ -1,0 +1,39 @@
+{
+  "short_name": "TNT Garage",
+  "name": "TNT Garage - قطع غيار السيارات الألمانية وخدمة ونش الانقاذ في مصر",
+  "description": "متجر قطع غيار السيارات الألمانية في مصر. قطع غيار جديدة ومستعملة لجميع ماركات BMW و Volkswagen Group. خدمة ونش انقاذ 24/7، فحص السيارات، صيانة السيارات الألمانية.",
+  "lang": "ar-EG",
+  "dir": "rtl",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "logotr.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "logotr.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "categories": ["automotive", "shopping", "business"],
+  "screenshots": [
+    {
+      "src": "logotr.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+  ]
+}

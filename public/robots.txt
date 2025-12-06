@@ -1,0 +1,35 @@
+# TNT Garage - قطع غيار السيارات الألمانية وخدمة ونش الانقاذ في مصر
+# https://www.robotstxt.org/robotstxt.html
+
+User-agent: *
+Allow: /
+
+# Block development and admin files
+Disallow: /static/js/
+Disallow: /static/css/
+Disallow: /admin/
+Disallow: /admin-login/
+
+# Allow important pages for Arabic audience
+Allow: /new-parts
+Allow: /used-parts
+Allow: /videos
+Allow: /winch
+Allow: /bmw-group
+Allow: /vw-group
+Allow: /articles
+
+# Arabic language preference
+User-agent: Googlebot
+Allow: /
+
+# Sitemap location
+Sitemap: https://tntgaragede.com/sitemap.xml
+
+# Crawl delay (helps prevent server overload)
+Crawl-delay: 1
+
+# Contact information for crawlers
+# Website: TNT Garage - قطع غيار السيارات الألمانية
+# Location: مصر، القاهرة، المعادي
+# Phone: +201111132621
