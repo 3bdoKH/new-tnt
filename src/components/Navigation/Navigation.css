@@ -3,7 +3,7 @@
   top: 0;
   left: 0;
   right: 0;
-  background: rgba(255, 255, 255, 0.95);
+  background: rgb(221 221 221 / 95%);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid #e9ecef;
   z-index: 9999;
@@ -154,7 +154,7 @@
   .nav-container {
     padding: 0 15px;
   }
-  
+
   .brand-logo {
     height: 40px;
   }
@@ -164,4 +164,4 @@
   .brand-logo {
     height: 35px;
   }
-} 
+}
