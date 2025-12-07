@@ -167,9 +167,6 @@ const CarWashing = () => {
               <h3>لماذا تختار خدمتنا؟</h3>
               <div className="info-list">
                 <div className="info-item">
-                  <span>سعر ثابت 50 جنيه</span>
-                </div>
-                <div className="info-item">
                   <span>خدمة سريعة وفعالة</span>
                 </div>
                 <div className="info-item">
@@ -215,12 +212,6 @@ const CarWashing = () => {
                     <option value="غسيل بالبخار">غسيل بالبخار</option>
                   </select>
                 </div>
-
-                <div className="price-display">
-                  <span className="price-label">السعر:</span>
-                  <span className="price-value">50 جنيه</span>
-                </div>
-
                 <button type="submit" className="submit-btn">
                   <span className="btn-icon">💬</span>
                   احجز عبر واتساب

@@ -146,20 +146,84 @@ export const partsAPI = {
   // Create new part
   createPart: async (partData) => {
     try {
+      console.log("=== SENDING PART DATA ===");
+      console.log("Part data to send:", {
+        name: partData.name,
+        price: partData.price,
+        priceAsNumber: Number(partData.price),
+        description: partData.description ? "provided" : "missing",
+        brand: partData.brand,
+        model: partData.model,
+        status: partData.status,
+        image: partData.image
+          ? `base64 image (length: ${partData.image.length})`
+          : null,
+      });
+
+      // Validate data before sending
+      if (!partData.name?.trim()) {
+        throw new Error("Part name is required");
+      }
+      if (!partData.price || isNaN(Number(partData.price))) {
+        throw new Error("Valid price is required");
+      }
+      if (!partData.description?.trim()) {
+        throw new Error("Description is required");
+      }
+      if (!partData.brand?.trim()) {
+        throw new Error("Brand is required");
+      }
+      if (!partData.model?.trim()) {
+        throw new Error("Model is required");
+      }
+
+      const requestBody = {
+        name: partData.name.trim(),
+        price: Number(partData.price),
+        description: partData.description.trim(),
+        brand: partData.brand.trim(),
+        model: partData.model.trim(),
+        status: partData.status || "new",
+        image: partData.image || null,
+      };
+
+      console.log("Request body prepared, sending...");
+
       const response = await fetch(`${API_BASE_URL}/parts`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          ...partData,
-          price: Number(partData.price),
-        }),
+        body: JSON.stringify(requestBody),
       });
-      const data = await response.json();
+
+      console.log("Response status:", response.status);
+      console.log("Response headers:", {
+        contentType: response.headers.get("content-type"),
+        contentLength: response.headers.get("content-length"),
+      });
+
+      let data;
+      try {
+        data = await response.json();
+      } catch (parseError) {
+        console.error("Failed to parse JSON response:", parseError);
+        throw new Error(
+          `Server returned invalid JSON (status ${response.status})`
+        );
+      }
+
+      console.log("Response data:", data);
+
+      if (!response.ok) {
+        console.error("Server error response:", data);
+        throw new Error(data.message || `Server error: ${response.status}`);
+      }
+
       return data;
     } catch (error) {
-      console.error("Error creating part:", error);
+      console.error("=== ERROR CREATING PART ===");
+      console.error("Error:", error);
       throw error;
     }
   },

@@ -132,16 +132,36 @@ const AdminDashboard = () => {
     const handlePartImageChange = async (e) => {
         if (e.target.files && e.target.files[0]) {
             const file = e.target.files[0];
+            
+            // Check file size (limit to 5MB)
+            const maxSizeInBytes = 5 * 1024 * 1024; // 5MB
+            if (file.size > maxSizeInBytes) {
+                setError(`حجم الصورة كبير جداً. الحد الأقصى 5 ميجابايت. حجم الملف المحدد: ${(file.size / 1024 / 1024).toFixed(2)} ميجابايت`);
+                e.target.value = ''; // Clear the file input
+                return;
+            }
+
+            // Check file type
+            if (!file.type.startsWith('image/')) {
+                setError('يرجى اختيار ملف صورة فقط');
+                e.target.value = ''; // Clear the file input
+                return;
+            }
+
             try {
+                console.log(`Processing image: ${file.name}, size: ${(file.size / 1024).toFixed(2)} KB`);
                 const base64 = await fileToBase64(file);
+                console.log(`Base64 size: ${(base64.length / 1024).toFixed(2)} KB`);
+                
                 setPartForm({
                     ...partForm,
                     image: base64,
                     imageFile: file
                 });
+                setError(''); // Clear any previous errors
             } catch (error) {
                 console.error("Error converting file to base64:", error);
-                setError("Error processing image file");
+                setError("خطأ في معالجة ملف الصورة: " + error.message);
             }
         }
     };
@@ -150,16 +170,36 @@ const AdminDashboard = () => {
     const handleArticleImageChange = async (e) => {
         if (e.target.files && e.target.files[0]) {
             const file = e.target.files[0];
+            
+            // Check file size (limit to 5MB)
+            const maxSizeInBytes = 5 * 1024 * 1024; // 5MB
+            if (file.size > maxSizeInBytes) {
+                setError(`حجم الصورة كبير جداً. الحد الأقصى 5 ميجابايت. حجم الملف المحدد: ${(file.size / 1024 / 1024).toFixed(2)} ميجابايت`);
+                e.target.value = ''; // Clear the file input
+                return;
+            }
+
+            // Check file type
+            if (!file.type.startsWith('image/')) {
+                setError('يرجى اختيار ملف صورة فقط');
+                e.target.value = ''; // Clear the file input
+                return;
+            }
+
             try {
+                console.log(`Processing image: ${file.name}, size: ${(file.size / 1024).toFixed(2)} KB`);
                 const base64 = await fileToBase64(file);
+                console.log(`Base64 size: ${(base64.length / 1024).toFixed(2)} KB`);
+                
                 setArticleForm({
                     ...articleForm,
                     image: base64,
                     imageFile: file
                 });
+                setError(''); // Clear any previous errors
             } catch (error) {
                 console.error("Error converting file to base64:", error);
-                setError("Error processing image file");
+                setError("خطأ في معالجة ملف الصورة: " + error.message);
             }
         }
     };
@@ -179,17 +219,56 @@ const AdminDashboard = () => {
         e.preventDefault();
         try {
             setLoading(true);
+            setError(''); // Clear previous errors
 
-            // Prepare form data
+            console.log("=== FORM SUBMIT ===");
+            console.log("Form data:", partForm);
+
+            // Validate form data before sending
+            if (!partForm.name?.trim()) {
+                setError('اسم القطعة مطلوب');
+                setLoading(false);
+                return;
+            }
+            if (!partForm.price || isNaN(Number(partForm.price)) || Number(partForm.price) <= 0) {
+                setError('السعر يجب أن يكون رقم موجب');
+                setLoading(false);
+                return;
+            }
+            if (!partForm.description?.trim()) {
+                setError('الوصف مطلوب');
+                setLoading(false);
+                return;
+            }
+            if (!partForm.brand?.trim()) {
+                setError('الماركة مطلوبة');
+                setLoading(false);
+                return;
+            }
+            if (!partForm.model?.trim()) {
+                setError('الموديل مطلوب');
+                setLoading(false);
+                return;
+            }
+
+            // Prepare form data - exclude imageFile as it can't be JSON serialized
+            const { imageFile, ...partFormData } = partForm;
             const partData = {
-                ...partForm,
+                ...partFormData,
                 price: Number(partForm.price)
             };
+
+            console.log("Submitting part data:", {
+                ...partData,
+                image: partData.image ? "image included" : "no image"
+            });
 
             // Send request using API
             const data = editingPart
                 ? await partsAPI.updatePart(editingPart.id, partData)
                 : await partsAPI.createPart(partData);
+
+            console.log("API response:", data);
 
             if (data.success) {
                 setPartForm({
@@ -206,13 +285,42 @@ const AdminDashboard = () => {
                 if (partImageRef.current) {
                     partImageRef.current.value = '';
                 }
-                fetchParts();
+                await fetchParts();
                 setError('');
+                alert(editingPart ? 'تم تحديث القطعة بنجاح!' : 'تم إضافة القطعة بنجاح!');
             } else {
-                setError(data.message);
+                // Handle specific error types
+                let errorMessage = 'فشل حفظ القطعة';
+                
+                if (data.errorType === 'SequelizeUniqueConstraintError' || data.field) {
+                    // Duplicate entry error
+                    const fieldNameArabic = {
+                        'name': 'الاسم',
+                        'brand': 'الماركة',
+                        'model': 'الموديل'
+                    };
+                    const arabicField = fieldNameArabic[data.field] || data.field;
+                    errorMessage = `توجد قطعة بنفس ${arabicField} في قاعدة البيانات. يرجى استخدام ${arabicField} مختلف.`;
+                } else {
+                    errorMessage = data.message || 'فشل حفظ القطعة';
+                    if (data.details) {
+                        errorMessage += ` - ${JSON.stringify(data.details)}`;
+                    }
+                }
+                
+                setError(errorMessage);
+                console.error("Save failed:", data);
             }
         } catch (error) {
-            setError('Error saving part: ' + error.message);
+            console.error("=== ERROR IN FORM SUBMIT ===", error);
+            
+            // Parse error message for better display
+            let errorMsg = error.message;
+            if (errorMsg.includes('Duplicate entry') || errorMsg.includes('already exists')) {
+                errorMsg = 'توجد قطعة بنفس البيانات في قاعدة البيانات. يرجى التحقق من الاسم أو الماركة أو الموديل.';
+            }
+            
+            setError('خطأ في حفظ القطعة: ' + errorMsg);
         } finally {
             setLoading(false);
         }
@@ -357,8 +465,10 @@ const AdminDashboard = () => {
         try {
             setLoading(true);
 
+            // Prepare article data - exclude imageFile as it can't be JSON serialized
+            const { imageFile, ...articleFormData } = articleForm;
             const articleData = {
-                ...articleForm,
+                ...articleFormData,
                 tags: articleForm.tags ? articleForm.tags.split(',').map(tag => tag.trim()) : [],
                 sections: articleForm.sections
             };
