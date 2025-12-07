@@ -46,6 +46,12 @@
   transition: transform 0.3s ease;
 }
 
+@media (max-width: 768px) {
+  .nav-brand .brand-logo {
+    margin-left: -35px;
+  }
+}
+
 .brand-link:hover .brand-logo {
   transform: scale(1.05);
 }
